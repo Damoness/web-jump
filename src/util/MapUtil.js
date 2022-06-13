@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 const RIGHT = 0;
 const LEFT = 1;
@@ -6,7 +6,17 @@ const TOP = 2;
 const BOTTOM = 3;
 const BEHIND = 4;
 const AFTER = 5;
-function recreateCubeUV(textureWidth, textureHeight, geometry, faceIndex, x1, y1, x2, y2, rotate) {
+function recreateCubeUV(
+  textureWidth,
+  textureHeight,
+  geometry,
+  faceIndex,
+  x1,
+  y1,
+  x2,
+  y2,
+  rotate
+) {
   // 将 px 坐标转换到 uv 坐标
   const tileUvW = 1 / textureWidth;
   const tileUvH = 1 / textureHeight;
@@ -44,14 +54,4 @@ function recreateCubeUV(textureWidth, textureHeight, geometry, faceIndex, x1, y1
   }
 }
 
-export {
-  recreateCubeUV,
-  RIGHT,
-  LEFT,
-  TOP,
-  BOTTOM,
-  BEHIND,
-  AFTER
-}
-
-
+export { recreateCubeUV, RIGHT, LEFT, TOP, BOTTOM, BEHIND, AFTER };

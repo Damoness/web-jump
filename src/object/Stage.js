@@ -10,8 +10,8 @@ import {
   DirectionalLight,
   OrthographicCamera,
   BoxHelper,
-  Vector2
-} from 'three';
+  Vector2,
+} from "three";
 
 import {
   BACKGROUND_COLOR,
@@ -23,21 +23,20 @@ import {
   FAR,
   LIGHT_COLOR,
   ORBIT_CONTROL,
-  ENABLE_IMAGE_POST_PROCESS
-} from '../config/constant';
+  ENABLE_IMAGE_POST_PROCESS,
+} from "../config/constant";
 
 // DEBUG 时候用的视角控制器
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // 残影效果插件（该方案被 PASS）
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { AfterimagePass } from "three/examples/jsm/postprocessing/AfterimagePass.js";
 
-import Stats from 'stats.js';
+import Stats from "stats.js";
 
 export default class Stage {
-
-  constructor () {
+  constructor() {
     // 场景
     this.scene = null;
     // 地面
@@ -75,26 +74,26 @@ export default class Stage {
   }
 
   // 场景
-  createScene () {
+  createScene() {
     this.scene = new Scene();
     this.scene.updateMatrixWorld(true);
     this.scene.background = new Color(BACKGROUND_COLOR);
 
     if (DEV) {
       // 坐标辅助线
-      this.scene.add(new AxesHelper(FAR))
+      this.scene.add(new AxesHelper(FAR));
     }
   }
 
   // 地面
-  createPlane () {
+  createPlane() {
     // 创建一个足够大的地面
     // 由于视角是 45 度向下看，地面会比实际的大，这里简单处理下
     const geometry = new PlaneGeometry(2 * FAR, 2 * FAR, 1, 1);
     // ShadowMaterial 阴影材质, 此材质可以接收阴影
     // transparent： 透明，在非透明对象之后渲染
     // opacity: 透明度
-    const material = new ShadowMaterial({ transparent: true, opacity: 0.5});
+    const material = new ShadowMaterial({ transparent: true, opacity: 0.5 });
 
     this.plane = new Mesh(geometry, material);
     // 接收阴影
@@ -104,11 +103,11 @@ export default class Stage {
     this.plane.rotation.x = -Math.PI / 2;
 
     if (DEV) {
-      const box = new BoxHelper( this.plane );
-      this.scene.add( box );
+      const box = new BoxHelper(this.plane);
+      this.scene.add(box);
     }
 
-    this.scene.add(this.plane)
+    this.scene.add(this.plane);
   }
 
   // 光源
@@ -120,23 +119,37 @@ export default class Stage {
     this.shadowLight = new DirectionalLight(LIGHT_COLOR, 0.5);
     // 设定光照源方向，目标默认是原点
     // 这个大小无意义，只代表方向
-    this.shadowLight.position.set(FAR/6, FAR/2, FAR/6);
+    this.shadowLight.position.set(FAR / 6, FAR / 2, FAR / 6);
     // 开启阴影投射
     this.shadowLight.castShadow = true;
 
     // 定义可见域的投射阴影
-    this.shadowLight.shadow.camera = new OrthographicCamera(-WIDTH*1.5, WIDTH*1.5, HEIGHT, -HEIGHT, 0, 2 * FAR);
-    this.shadowLight.shadow.mapSize = new Vector2( 1024, 1024 );
+    this.shadowLight.shadow.camera = new OrthographicCamera(
+      -WIDTH * 1.5,
+      WIDTH * 1.5,
+      HEIGHT,
+      -HEIGHT,
+      0,
+      2 * FAR
+    );
+    this.shadowLight.shadow.mapSize = new Vector2(1024, 1024);
 
     this.scene.add(ambientLight);
     this.scene.add(this.shadowLight);
   }
 
   // 相机
-  createCamera () {
+  createCamera() {
     // 相机使用正交相机
     // 相机是椎体的宽度和高度尽量和界面大小一致
-    this.camera = new OrthographicCamera(-WIDTH/2, WIDTH/2, HEIGHT/2, -HEIGHT/2, -FAR/4, FAR*2);
+    this.camera = new OrthographicCamera(
+      -WIDTH / 2,
+      WIDTH / 2,
+      HEIGHT / 2,
+      -HEIGHT / 2,
+      -FAR / 4,
+      FAR * 2
+    );
 
     if (DEV && ORBIT_CONTROL) {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -145,7 +158,7 @@ export default class Stage {
 
     // 相机位置超过最大物体
     // 斜向右下看
-    this.camera.position.set(-FAR/2, FAR/2, FAR/2);
+    this.camera.position.set(-FAR / 2, FAR / 2, FAR / 2);
     this.camera.lookAt(0, 0, 0);
 
     if (ENABLE_IMAGE_POST_PROCESS) {
@@ -155,7 +168,6 @@ export default class Stage {
       const afterimagePass = new AfterimagePass();
       this.composer.addPass(afterimagePass);
     }
-
   }
 
   // 性能监控
@@ -170,12 +182,12 @@ export default class Stage {
   }
 
   // 渲染器
-  createRenderer () {
+  createRenderer() {
     this.renderer = new WebGLRenderer({
-      antialias:true // 抗锯齿
+      antialias: true, // 抗锯齿
     });
     this.renderer.setSize(CLIENT_WIDTH, CLIENT_HEIGHT);
-    document.body.appendChild(this.renderer.domElement );
+    document.body.appendChild(this.renderer.domElement);
     // 开启阴影
     this.renderer.shadowMap.enabled = true;
     // 设置设备像素
@@ -187,10 +199,9 @@ export default class Stage {
     }
   }
 
-
   // 执行渲染
-  render () {
-    const {scene, camera, renderer, composer, stats} = this;
+  render() {
+    const { scene, camera, renderer, composer, stats } = this;
 
     function animate() {
       if (DEV) {

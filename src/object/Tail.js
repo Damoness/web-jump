@@ -3,18 +3,18 @@ import {
   Mesh,
   DoubleSide,
   PlaneGeometry,
-  Vector3
-} from 'three'
+  Vector3,
+} from "three";
 
 import {
   TAIL_WIDTH,
   TAIL_HEIGHT,
   TAIL_DURATION,
-  WIDTH
+  WIDTH,
 } from "../config/constant";
 
 // 一个完整的拖尾是由若干个碎片组成的
-class TailFragment{
+class TailFragment {
   constructor(geometry, material) {
     this.tickTime = 0;
     this.mesh = new Mesh(geometry, material);
@@ -36,7 +36,7 @@ class TailFragment{
     this.mesh.visible = true;
   }
 
-  reset(){
+  reset() {
     this.tickTime = 0;
     this.mesh.scale.set(1, 1, 1);
     this.mesh.visible = false;
@@ -62,7 +62,7 @@ export default class Tail {
   }
 
   // 缓存若干 TailFragment
-  init(){
+  init() {
     this.geometry = new PlaneGeometry(TAIL_WIDTH, TAIL_HEIGHT);
 
     // 白色带透明度
@@ -70,7 +70,7 @@ export default class Tail {
       color: 0xffffff,
       side: DoubleSide,
       transparent: true,
-      opacity: 0.6
+      opacity: 0.6,
     });
 
     // 我们设置的屏宽是 100，精度是 1
@@ -106,10 +106,9 @@ export default class Tail {
 
     // 两次渲染间的距离不能过大，过大说明设备卡顿
     // 也会导致拖尾很长，创建太多的 Fragment 对象
-    if (distance < WIDTH/2) {
+    if (distance < WIDTH / 2) {
       // 距离超过了单个 Fragment 的宽度，此时需要生成 Fragment
       if (distance >= TAIL_WIDTH) {
-
         // 判断需要生成 Fragment 的个数
         const m = distance / TAIL_WIDTH;
         const n = Math.floor(m);
@@ -122,10 +121,10 @@ export default class Tail {
 
         for (let i = 1; i <= n; i++) {
           // 多个 Fragment 位置简单的用插值法就可以了
-          nowPosition = this.lastPosition.lerp(this.nowPosition, i/m);
+          nowPosition = this.lastPosition.lerp(this.nowPosition, i / m);
 
           // 计算 Fragment 缩放比例
-          let scale = 1 - tickScale + tickScale * (i / m) ;
+          let scale = 1 - tickScale + tickScale * (i / m);
 
           scale = scale <= 0 ? 0 : scale;
 

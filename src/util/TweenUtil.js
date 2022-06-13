@@ -1,4 +1,4 @@
-import TWEEN from '@tweenjs/tween.js'
+import TWEEN from "@tweenjs/tween.js";
 
 // 每次动画 update 都要做的事情
 // 本例中绑定了 render 函数
@@ -6,7 +6,7 @@ let frameAction = () => {};
 
 const animateFrame = function () {
   if (animateFrame.running) {
-    return
+    return;
   }
   animateFrame.running = true;
 
@@ -21,14 +21,11 @@ const animateFrame = function () {
       cancelAnimationFrame(id);
     }
   };
-  animate()
+  animate();
 };
 
 const setFrameAction = (cb) => {
   frameAction = cb;
 };
 
-export{
-  animateFrame,
-  setFrameAction
-}
+export { animateFrame, setFrameAction };
