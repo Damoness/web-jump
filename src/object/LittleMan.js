@@ -60,6 +60,12 @@ class LittleMan {
     this.init();
   }
 
+  reload() {
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
+
   init() {
     // 创建头部
     this.initHead();
@@ -302,6 +308,7 @@ class LittleMan {
     // 跳到了空地（游戏结束）
     if (state === LittleMan.STATE.outRange) {
       this.landToGround();
+      this.reload();
     }
 
     // 前向掉落,后向掉落（游戏结束）
@@ -311,6 +318,7 @@ class LittleMan {
       state === LittleMan.STATE.next_edge_back
     ) {
       this.leaning(state);
+      this.reload();
     }
   }
 
